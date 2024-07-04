@@ -1,14 +1,10 @@
 /*
-
 Build a profit calculator
 
 - Ask for evenue, expenses, & tax rate
 - Calculate earnings before taxe (EBT) and eranings after taxes (profit)
 - Calculate ratio (EBT / profit)
 - Ouput EBT, profit and the ratio
-
-
-
 */
 
 package main
@@ -40,4 +36,19 @@ func main() {
 	fmt.Println(ebt)
 	fmt.Println(profit)
 	fmt.Println(ratio)
+
+}
+
+func getEbt() {
+
+	fmt.Print("GET ebt FUNCTION")
+
+}
+
+func getProfit() {
+	fmt.Print("GET Profit FUNCTION")
+}
+
+func getRatio() {
+	fmt.Print("GET Ratio FUNCTION")
 }
