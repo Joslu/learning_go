@@ -7,36 +7,94 @@ Build a profit calculator
 - Ouput EBT, profit and the ratio
 */
 
+/*
+
+	UPDATE:
+
+	Goals
+
+	1) Validate user input
+		- Show error messages and exit if invalid input is provided
+		- no negative numbers
+		- not 0
+
+	2) Stored calculated values into file
+
+*/
+
 package main
 
 import (
+	"errors"
 	"fmt"
+	"os"
 )
 
-// Main function
-func main() {
+const profitValue = "profit.txt"
 
-	var revenue, expenses, taxRate uint64
+func getUserInput(infoText string) (float64, error) {
+	var userinput float64
 
-	fmt.Print("Type revenue: ")
-	fmt.Scan(&revenue)
+	fmt.Println(infoText)
+	fmt.Scan(&userinput)
 
-	fmt.Print("Type expenses: ")
-	fmt.Scan(&expenses)
+	if userinput <= 0 {
 
-	fmt.Print("Tax Rate: ")
-	fmt.Scan(&taxRate)
+		return 0, errors.New("Value must be greater that 0")
+	}
 
-	// EBT
+	return userinput, nil
 
+}
+
+func calculate(revenue, expenses, taxRate float64) (float64, float64, float64) {
 	ebt := revenue - expenses
 	profit := ebt * (1 - (taxRate / 100))
 	ratio := ebt / profit
 
-	fmt.Println(ebt)
-	fmt.Println(profit)
-	fmt.Println(ratio)
+	return ebt, profit, ratio
 
+}
+
+func saveValues(valueToSave1, valueToSave2, valueToSave3 float64) {
+
+	valueText := fmt.Sprintf("EBT:%.1f\nProfit:%.1f\nsRatio:%.1f\n", valueToSave1, valueToSave2, valueToSave3)
+	os.WriteFile("value.txt", []byte(valueText), 0644)
+
+}
+
+// Main function
+func main() {
+
+	fmt.Println("Welcome to ProfitCalculator 🧮")
+
+	revenue, err1 := getUserInput("Revenue: ")
+
+	if err1 != nil {
+		fmt.Println(err1)
+		return
+	}
+
+	expenses, err2 := getUserInput("Expenses: ")
+
+	if err2 != nil {
+		fmt.Println(err2)
+		return
+	}
+	taxRate, err3 := getUserInput("Tax Rate")
+
+	if err3 != nil {
+		fmt.Println(err3)
+		return
+	}
+
+	ebt, profit, ratio := calculate(revenue, expenses, taxRate)
+
+	fmt.Println("ebt: ", ebt)
+	fmt.Println("profit: ", profit)
+	fmt.Println("ratio: ", ratio)
+
+	saveValues(ebt, profit, ratio)
 }
 
 func getEbt() {

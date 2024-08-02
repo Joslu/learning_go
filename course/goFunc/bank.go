@@ -2,24 +2,40 @@
 
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"example.com/bank/fileops"
+	"github.com/Pallinder/go-randomdata"
+)
+
+const accountBalanaceFileName = "balance.txt"
 
 func main() {
 
 	var userChoice int
-	var accountBalanace float64 = 1000
+
 	var moneyToDeposit float64
 	var moneyToWithdraw float64
 
+	accountBalanace, err := fileops.GetFloatFromFile(accountBalanaceFileName)
+
+	if err != nil {
+		fmt.Println("ERROR 😰: ")
+		fmt.Println(err)
+		fmt.Println("---------------------")
+
+		//return
+		panic("Can't continue sorry")
+	}
+
 	fmt.Println("Welcome to this GoBank 🏦 ")
+	fmt.Println("Reach us 24/7 ", randomdata.PhoneNumber())
 	fmt.Println("What do you want to do today?")
 
 	for {
 
-		fmt.Println("1. Check balance")
-		fmt.Println("2. Deposit Money")
-		fmt.Println("3. Withdraw Money")
-		fmt.Println("4. Exit")
+		presenOptions()
 
 		fmt.Print("Your choice: ")
 		fmt.Scan(&userChoice)
@@ -38,6 +54,7 @@ func main() {
 			}
 
 			accountBalanace += moneyToDeposit // accountBalance = accountBalance + moneyToDeposit
+			fileops.WriteFloatToFile(accountBalanace, accountBalanaceFileName)
 			fmt.Println("This is your current balance: ", accountBalanace)
 		case 3:
 			fmt.Println("How much do you want to withdraw?: ")
@@ -56,6 +73,7 @@ func main() {
 			}
 
 			accountBalanace -= moneyToWithdraw // accountBalance = accountBalance + moneyToDeposit
+			fileops.WriteFloatToFile(accountBalanace, accountBalanaceFileName)
 			fmt.Println("This is your current balance: ", accountBalanace)
 		default:
 			fmt.Println("Bye 👋🏽 ")
@@ -102,21 +120,4 @@ func main() {
 		*/
 	}
 
-}
-
-func bank() int {
-	var choice int
-	for i := 0; i < 2; i++ {
-		fmt.Println("Welcome to this GoBank 🏦 ")
-		fmt.Println("What do you want to do today?")
-		fmt.Println("1. Check balance")
-		fmt.Println("2. Deposit Money")
-		fmt.Println("3. Withdraw Money")
-		fmt.Println("4. Exit")
-
-		fmt.Print("Your choice: ")
-		fmt.Scan(&choice)
-
-	}
-	return choice
 }
